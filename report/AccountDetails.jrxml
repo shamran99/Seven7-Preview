@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CashFlow" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="50" bottomMargin="50" uuid="aaaa59b5-0521-43be-ad80-17ff1657485b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="plain" isDefault="true"/>
+	<style name="bold" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="italic" isItalic="true" pdfFontName="Helvetica-Oblique"/>
+	<parameter name="Title" class="java.lang.String"/>
+	<parameter name="Subtitle" class="java.lang.String"/>
+	<parameter name="Total" class="java.lang.String"/>
+	<parameter name="Category" class="java.lang.String"/>
+	<parameter name="Description" class="java.lang.String"/>
+	<parameter name="Income" class="java.lang.String"/>
+	<parameter name="Expense" class="java.lang.String"/>
+	<parameter name="Date" class="java.lang.String"/>
+	<parameter name="DateToday" class="java.lang.String"/>
+	<parameter name="Page" class="java.lang.String"/>
+	<parameter name="AccountName" class="java.lang.String"/>
+	<field name="currencyCode" class="java.lang.String"/>
+	<field name="baseCategory" class="java.lang.String"/>
+	<field name="category" class="java.lang.String"/>
+	<field name="income" class="java.lang.Long"/>
+	<field name="incomeString" class="java.lang.String"/>
+	<field name="expense" class="java.lang.Long"/>
+	<field name="expenseString" class="java.lang.String"/>
+	<field name="accountName" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<variable name="CurrencyIncome" class="java.lang.Long" resetType="Group" resetGroup="CurrencyGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{income}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Long(0)]]></initialValueExpression>
+	</variable>
+	<variable name="CurrencyExpense" class="java.lang.Long" resetType="Group" resetGroup="CurrencyGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{expense}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Long(0)]]></initialValueExpression>
+	</variable>
+	<variable name="CurrencyIncomeFinal" class="java.lang.Long" resetType="Group" resetGroup="CurrencyGroup">
+		<variableExpression><![CDATA[$V{CurrencyIncome} == null ? 0 : $V{CurrencyIncome}]]></variableExpression>
+	</variable>
+	<variable name="CurrencyExpenseFinal" class="java.lang.Long" resetType="Group" resetGroup="CurrencyGroup">
+		<variableExpression><![CDATA[$V{CurrencyExpense} == null ? 0 : $V{CurrencyExpense}]]></variableExpression>
+	</variable>
+	<group name="CurrencyGroup">
+		<groupExpression><![CDATA[$F{currencyCode}]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="50" splitType="Stretch">
+				<line>
+					<reportElement x="0" y="0" width="515" height="1" uuid="ac04908b-c6ac-4848-89a3-229fcc9c9dee"/>
+				</line>
+				<textField>
+					<reportElement style="bold" x="0" y="5" width="310" height="13" uuid="71921ac7-8d69-4962-94e9-e16795d5b5fc"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{Total} + " " + $F{currencyCode}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="bold" x="269" y="5" width="80" height="13" uuid="c93cc50b-7acf-463d-9bf2-726bd9a6d575"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[net.sf.jmoney.Currency.getCurrencyForCode($F{currencyCode}).format($V{CurrencyIncomeFinal}.longValue())]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="bold" x="349" y="5" width="80" height="13" uuid="dd534ae7-3c88-427b-8c8e-3667c5f8a955"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[net.sf.jmoney.Currency.getCurrencyForCode($F{currencyCode}).format($V{CurrencyExpenseFinal}.longValue())]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="bold" x="0" y="20" width="310" height="13" uuid="efba06d1-b8d5-4afb-88d5-c11bf3b31976"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{Income} + " - " + $P{Expense}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="bold" x="349" y="20" width="80" height="13" uuid="4a36fd2e-236f-42a2-9b84-8d5e7e8f261f"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[net.sf.jmoney.Currency.getCurrencyForCode($F{currencyCode}).format(
+	      $V{CurrencyIncomeFinal}.longValue() -
+	      $V{CurrencyExpenseFinal}.longValue())]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="37" width="515" height="1" uuid="d36e41e6-a617-4721-8e39-7ed174459b4a"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="50" splitType="Stretch">
+			<textField>
+				<reportElement style="bold" x="0" y="0" width="515" height="16" uuid="5bff1562-4d5a-431b-a15a-ff77b7e60a35"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="17" width="515" height="13" uuid="be3d383f-e2e0-42b1-9fba-8af9712df98e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{Subtitle}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement style="bold" x="0" y="0" width="56" height="13" uuid="d9c77e44-81b5-4a62-816c-2ea4dacae88c"/>
+				<textFieldExpression><![CDATA[$P{Date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="bold" x="56" y="0" width="70" height="13" uuid="5cf10560-fc62-4089-967a-b7f54f78684c"/>
+				<textFieldExpression><![CDATA[$P{Category}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="bold" x="126" y="0" width="143" height="13" uuid="5cf10560-fc62-4089-967a-b7f54f78684c"/>
+				<textFieldExpression><![CDATA[$P{Description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="bold" x="269" y="0" width="80" height="13" uuid="19db5814-3148-479e-b854-d5136abebb36"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{Income}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="bold" x="349" y="0" width="80" height="13" uuid="a3f49218-e640-4f4a-9bf3-f58b40e63c41"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{Expense}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="bold" x="429" y="0" width="80" height="13" uuid="e6a71e97-b224-4c63-8bae-a98dbe7cc6ec"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{AccountName}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="12" width="515" height="1" uuid="3c87cceb-f6c5-4e4c-a386-0e62cd3d8568"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="56" height="26" uuid="a8d1541d-4693-4050-aaec-0f87fe485fb3"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="56" y="0" width="70" height="26" uuid="c210a145-ee05-41d1-9247-86a97ea13ebd"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="0" width="143" height="26" uuid="c210a145-ee05-41d1-9247-86a97ea13ebd"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="269" y="0" width="80" height="26" uuid="a27d0f9d-1118-477c-93d4-323144d2ebf8"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{incomeString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="349" y="0" width="80" height="26" uuid="bbb95b42-87d9-430d-b261-bf5dab5b0852"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expenseString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="429" y="0" width="80" height="26" uuid="085ca604-8821-49c3-a461-5e533c13cda5"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="17" width="200" height="13" uuid="7e970629-0279-495e-b16c-405b99349fb3"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DateToday}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="17" width="200" height="13" uuid="648a973c-7890-40e9-a0ba-06a9adf0d821"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Page} + " " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

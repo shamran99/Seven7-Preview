@@ -1,0 +1,9 @@
+This guide provides you the steps to associate the sync with a specific account.
+
+1. Execute the generate_gdrivesync_tokens.sh file
+2. Go to the prompted link through a gmail account where you wanted to sync.
+3. Follow the steps provided by google and you can get a token.
+4. Copy the token and paste in the command line prompted input.
+5. That's all. The script will generate a authFile which contains the "accessToken" and the "refreshToken"
+6. Copy those tokens to your jdriveSync.properties file and paste it.
+That's All!!

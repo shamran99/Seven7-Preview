@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AccountBalances" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="50" bottomMargin="50" uuid="927c2af8-8ba5-488e-9c0c-49d4b8b221ec">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="plain" isDefault="true"/>
+	<style name="bold" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="italic" isItalic="true" pdfFontName="Helvetica-Oblique"/>
+	<parameter name="Title" class="java.lang.String"/>
+	<parameter name="Subtitle" class="java.lang.String"/>
+	<parameter name="Total" class="java.lang.String"/>
+	<parameter name="Account" class="java.lang.String"/>
+	<parameter name="Balance" class="java.lang.String"/>
+	<parameter name="DateToday" class="java.lang.String"/>
+	<parameter name="Page" class="java.lang.String"/>
+	<parameter name="TotalLKR" class="java.lang.String"/>
+	<parameter name="ExRate" class="java.lang.Double"/>
+	<field name="accountName" class="java.lang.String"/>
+	<field name="balance" class="java.lang.Long"/>
+	<field name="balanceString" class="java.lang.String"/>
+	<field name="currencyCode" class="java.lang.String"/>
+	<variable name="BalanceSum" class="java.lang.Long" resetType="Group" resetGroup="CurrencyGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Long(0)]]></initialValueExpression>
+	</variable>
+	<variable name="BalanceLKR" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{currencyCode}.toString().equals("GBP") ? $F{balance}*$P{ExRate} : $F{balance}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Long(0)]]></initialValueExpression>
+	</variable>
+	<group name="CurrencyGroup" minHeightToStartNewPage="60">
+		<groupExpression><![CDATA[$F{currencyCode}]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="35" splitType="Stretch">
+				<line>
+					<reportElement x="0" y="0" width="515" height="1" uuid="b15b7838-080e-433d-8eab-3e1ea50a7650"/>
+				</line>
+				<textField>
+					<reportElement style="bold" x="0" y="5" width="415" height="13" uuid="50eed210-e3f1-4c04-8c47-2ab101f751fa"/>
+					<textFieldExpression><![CDATA[$P{Total} + " " + $F{currencyCode}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="bold" x="420" y="5" width="95" height="13" uuid="61bf385e-1f11-4e5a-8d3b-5b7d79fbd0cb"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[net.sf.jmoney.Currency.getCurrencyForCode($F{currencyCode}).format($V{BalanceSum}.longValue())]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="22" width="515" height="1" uuid="f8c8b981-115b-4d56-9ef9-085deb4b9e8a"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="50" splitType="Stretch">
+			<textField>
+				<reportElement style="bold" x="0" y="0" width="515" height="16" uuid="8405e461-d094-4c9a-b5b2-630eae3c5af0"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="17" width="515" height="13" uuid="0403841b-4d72-4001-8776-62c99c6e82d1"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{Subtitle}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement style="bold" x="0" y="0" width="415" height="13" uuid="929a9f9f-8be2-45d8-a744-0698d3b9cdb3"/>
+				<textFieldExpression><![CDATA[$P{Account}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="bold" x="420" y="0" width="95" height="13" uuid="b283f5bc-6e46-4cab-a593-6463686acfe7"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{Balance}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="12" width="515" height="1" uuid="ec2f179b-c1d7-4d40-be16-801825f47fd3"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="415" height="13" uuid="ebedee29-3e3c-4c3b-83f9-f491711188e7"/>
+				<textFieldExpression><![CDATA[$F{accountName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="0" width="95" height="13" uuid="709b1877-8eea-417a-a5f6-59ba3acd7624"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{balanceString}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement style="bold" x="0" y="0" width="415" height="13" uuid="914402ae-ec61-436b-9b7a-d55334dab610"/>
+				<textFieldExpression><![CDATA[$P{TotalLKR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="bold" x="420" y="0" width="95" height="13" uuid="d212deb1-3a24-4405-85ef-665b2e5707e5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[net.sf.jmoney.Currency.getCurrencyForCode($F{currencyCode}).format($V{BalanceLKR}.longValue())]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

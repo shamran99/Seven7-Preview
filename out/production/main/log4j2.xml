@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <File name="FileAppender" fileName="seven7.log" immediateFlush="true" append="true">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <!-- This returns a layout such that
+             2018-11-06 14:30:57.101 [main] INFO  com.zaizi.rrdreport.MainApp - RRD report generation started
+            -->
+        </File>
+    </Appenders>
+    <Loggers>
+        <logger name="net.sf.jmoney" level="all"> <!-- Not class name, but package name. -->
+            <AppenderRef ref="FileAppender"/>
+        </logger>
+    </Loggers>
+</Configuration>
