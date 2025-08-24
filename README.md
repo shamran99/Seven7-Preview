@@ -126,7 +126,7 @@ Contributions are welcome!
 
 ## License
 
-\[Specify license here, e.g., MIT License]
+
 
 ## Contact
 
